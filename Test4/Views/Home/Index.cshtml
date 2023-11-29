@@ -1,0 +1,135 @@
+﻿@using System.Globalization;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+
+    <h2 class="display-6">Welcome to the Book Library Manager app.</h2>
+
+</div>
+
+<div>
+    <button type="button" class="btn btn-primary" onclick="showAuthors()">Author</button>
+    <button type="button" class="btn btn-primary" onclick="showGenres()">Genre</button>
+    <button type="button" class="btn btn-primary" onclick="showBooks()">List Books</button>
+</div>
+
+@functions {
+    public string FormatAuthorName(string lastName, string firstName, string middleName)
+    {
+        return (lastName == null ? "" : CultureInfo.CurrentCulture.TextInfo.ToTitleCase(lastName.ToLower()) + " " +
+                (firstName?.Length > 0 ? firstName.Substring(0, 1).ToUpper() + "." : "") +
+                (middleName?.Length > 0 ? " " + middleName.Substring(0, 1).ToUpper() + "." : ""));
+    }
+}
+
+
+<p id="addAuthorLink" style="display: none;">
+    <a asp-controller="Home" asp-action="CreateAll">Add Author</a>
+</p>
+
+<table id="authorsTable" style="display: none;" class="table">
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Books in base</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.AuthorViewModels)
+        {
+            <tr>
+                <td>
+                    @FormatAuthorName(item.LastName, item.FirstName, item.MiddleName)
+                </td>
+                <td>@item.Books.Count</td>
+                <td>
+                    <a asp-controller="Author" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="Author" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-controller="Author" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<table id="genresTable" style="display: none;" class="table">
+    <thead>
+        <tr>
+            <th>Genre</th>
+            <th>Books</th>
+            <th>Authors</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Genre genre in Enum.GetValues(typeof(Genre)))
+        {
+            var genreBooks = ((IEnumerable<Book>)ViewBag.BookViewModels).Where((Func<Book, bool>)(b => b.Genre == genre)).ToList();
+
+            if (genreBooks.Any())
+            {
+                <tr>
+                    <td>@genre</td>
+                    <td>
+                        <ul>
+                            @foreach (var book in genreBooks)
+                            {
+                                <li>
+                                    @(book.Title == null ? "" : char.ToUpper(book.Title[0]) + book.Title.Substring(1).ToLower())
+                                </li>
+                            }
+                        </ul>
+                    </td>
+                    <td>
+                        @foreach (var author in genreBooks.Select(b => b.Author).Distinct())
+                        {
+                            <div>@FormatAuthorName(author.LastName, author.FirstName, author.MiddleName)</div>
+                        }
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<p id="addBookLink" style="display: none;">
+    <a asp-controller="Book" asp-action="Create">Add Book</a>
+</p>
+
+<table id="booksTable" style="display: none;" class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>PageCount</th>
+            <th>Genre</th>
+            <th>Author</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ViewBag.BookViewModels)
+        {
+            <tr>
+                <td>@(item.Title == null ? "" : char.ToUpper(item.Title[0]) + item.Title.Substring(1).ToLower())</td>
+                <td>@item.PageCount</td>
+                <td>@item.Genre</td>
+                <td>@(item.Author.LastName == null ? "" : char.ToUpper(item.Author.LastName[0]) + item.Author.LastName.Substring(1).ToLower())</td>
+                <td>
+                    <a asp-controller="Book" asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-controller="Book" asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-controller="Book" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

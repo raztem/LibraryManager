@@ -1,0 +1,16 @@
+﻿Nuget:
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.Sqlite
+Microsoft.EntityFrameworkCore.Tools
+
+
+Migrations (open in project terminal)
+dotnet ef migrations add Initial
+dotnet ef database update
+
+Now let’s add an MVC controller with action methods for CRUD operations.
+For that right-click on Controllers folder, Add > Controller.
+Then select ‘MVC Controller with views, using Entity Framework’.
+Fill up the window with corresponding details.
+If you face the following error while creating the controller.
+you should try again after installing the NuGet Package – Microsoft.VisualStudio.Web.CodeGeneration.Utils.

@@ -1,0 +1,60 @@
+﻿@model AuthorBookViewModel
+
+@{
+    ViewData["Title"] = "Create Library";
+}
+
+<h1>Create Library</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form id="createAllForm" asp-action="CreateAll" asp-controller="Home" method="post">
+            <div class="form-group">
+                <label class="control-label" asp-for="AuthorViewModels[0].LastName"></label>
+                <input class="form-control" asp-for="AuthorViewModels[0].LastName" required />
+                <span asp-validation-for="AuthorViewModels[0].LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="AuthorViewModels[0].FirstName"></label>
+                <input class="form-control" asp-for="AuthorViewModels[0].FirstName" required />
+                <span asp-validation-for="AuthorViewModels[0].FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="AuthorViewModels[0].MiddleName"></label>
+                <input class="form-control" asp-for="AuthorViewModels[0].MiddleName" />
+            </div>
+            <div class="form-group">
+                <label class="control-label" asp-for="AuthorViewModels[0].BirthDate"></label>
+                <input class="form-control" asp-for="AuthorViewModels[0].BirthDate" type="date" required />
+                <span asp-validation-for="AuthorViewModels[0].BirthDate" class="text-danger"></span>
+            </div>
+
+            <div>
+                <a href="#" id="addBookLink">Add Book</a>
+            </div>
+
+            <div id="addBookModal" style="display: none;">
+                <div class="form-group">
+                    <label class="control-label" asp-for="BookViewModels[0].Title"></label>
+                    <input class="form-control" asp-for="BookViewModels[0].Title" required />
+                    <span asp-validation-for="BookViewModels[0].Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="BookViewModels[0].PageCount"></label>
+                    <input class="form-control" asp-for="BookViewModels[0].PageCount" type="number" required />
+                    <span asp-validation-for="BookViewModels[0].PageCount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="BookViewModels[0].Genre"></label>
+                    <select class="form-control" asp-for="BookViewModels[0].Genre"
+                        asp-items="Html.GetEnumSelectList<Genre>()" required>
+                    </select>
+                    <span asp-validation-for="BookViewModels[0].Genre" class="text-danger"></span>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary">Save All</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
